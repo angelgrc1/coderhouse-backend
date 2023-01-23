@@ -1,0 +1,24 @@
+{
+  "name": "coderhouse-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/angelgrc1/coderhouse-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/angelgrc1/coderhouse-backend/issues"
+  },
+  "homepage": "https://github.com/angelgrc1/coderhouse-backend#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

@@ -19,7 +19,7 @@ class ProductManager {
   async getAllProducts() {
     const products = await this.getProducts();
     if (!products) return console.log("Not found");
-    else return console.log(products);
+    else return products;
   }
 
   async getProductById(id) {
@@ -96,12 +96,4 @@ class ProductManager {
 
 const productManager = new ProductManager("products.json");
 
-productManager.updateProductById(
-  9,
-  "New title",
-  "New description",
-  100,
-  "New thumbnail",
-  "New code",
-  100
-);
+module.exports = { productManager };
