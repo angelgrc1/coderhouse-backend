@@ -1,37 +1,17 @@
-const express = require("express");
-const { productManager } = require("./ProductManager");
+import express from "express";
+import router from "./routers/router.js";
+
 const app = express();
 
 const PORT = 3000;
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use("/api", router);
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
-});
-
-app.get("/products", (req, res) => {
-  if (req.query.limit) {
-    const limit = req.query.limit;
-    productManager.getProducts().then((products) => {
-      return res.json(JSON.stringify(products.slice(0, limit)));
-    });
-  } else {
-    productManager.getProducts().then((products) => {
-      return res.json(JSON.stringify(products));
-    });
-  }
-});
-
-app.get("/products/:id", (req, res) => {
-  const id = req.params.id;
-  productManager.getProducts().then((products) => {
-    products.map((product) => {
-      if (product.id == id) {
-        res.json(JSON.stringify(product));
-      } else {
-        res.json(JSON.stringify({ error: "Producto no encontrado" }));
-      }
-    });
-  });
 });
 
 const server = app.listen(PORT, () => {
