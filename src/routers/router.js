@@ -1,11 +1,10 @@
 import Router from "express";
-import cartRouter from "./cartRouter.js";
-import productsRouter from "./productsRouter.js";
+import apiRouter from "./api/api.routes.js";
+import { realTimeProductsRouter } from "./realTimeProducts.router.js";
 
 const router = Router();
 
-router.use("/products", productsRouter);
-router.use("/carts", cartRouter);
-
+router.use("/api", apiRouter);
+router.use("/realtimeproducts", realTimeProductsRouter);
 
 export default router;
