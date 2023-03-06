@@ -1,35 +1,53 @@
-import { Router } from "express";
-import cartManager from "../controllers/cartManager.js";
+import Router from "express";
+import {
+  getCart,
+  createCart,
+  addProductToCart,
+  deleteProductInCart,
+} from "../../controllers/cart.controller.js";
 
 const cartRouter = Router();
 
-cartRouter.get("/:cid", async (req, res) => {
-  const { cid } = req.params;
+cartRouter.get("/", async (req, res) => {
+  const { cartid } = req.query;
   try {
-    const cart = await cartManager.getCartById(cid);
-    res.status(200).send(cart);
+    const cart = await getCart(cartid);
+    res.render("cart", {
+      style: "index.css",
+      products: cart.products,
+      title: "Carrito",
+    });
   } catch (error) {
-    res.status(404).send(error.message);
+    res.send({ status: "error", error: error.message });
   }
 });
 
 cartRouter.post("/", async (req, res) => {
   try {
-    await cartManager.newCart(req.body);
-    res.status(201).send("Cart created sucessfully");
+    const result = await createCart();
+    res.send({ status: "success", payload: result });
   } catch (error) {
-    res.status(400).send(error.message);
+    res.send({ status: "error", error: error.message });
   }
 });
 
-cartRouter.post("/:cid/product/:pid", async (req, res) => {
-  const { cid, pid } = req.params;
-  const { quantity } = req.body;
+cartRouter.post("/addProduct", async (req, res) => {
+  const { cartId, productId } = req.body;
   try {
-    await cartManager.addProductToCart(cid, pid, quantity);
-    res.status(201).send(`Added product ${pid} to cart ${pid} with quantity ${quantity}`);
+    const result = await addProductToCart(cartId, productId);
+    res.send({ status: "success", payload: result });
   } catch (error) {
-    res.status(404).send(error.message);
+    res.send({ status: "error", error: error.message });
+  }
+});
+
+cartRouter.delete("/deleteProduct", async (req, res) => {
+  const { cartId, productId } = req.body;
+  try {
+    const result = await deleteProductInCart(cartId, productId);
+    res.send({ status: "success", payload: result });
+  } catch (error) {
+    res.send({ status: "error", error: error.message });
   }
 });
 

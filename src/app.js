@@ -1,5 +1,8 @@
 import express from "express";
 import router from "./routers/router.js";
+import { engine } from "express-handlebars";
+import path from "path";
+import { fileURLToPath } from 'url';
 
 const app = express();
 
@@ -14,8 +17,9 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.get("/", (req, res) => {
+  res.redirect("/products");
 });
 
-server.on("error", (error) => console.log(`Error: ${error}`));
+
+export default app;
