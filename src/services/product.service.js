@@ -1,11 +1,13 @@
-import ProductMaganer from "../../db/dao/product.dao.js";
-import productSchema from "../../db/dao/models/product.model.js";
+const products = require("../../products");
+const ProductDAO = require("../dao/product.dao");
+const productSchema = require("../models/product.model");
 
-const productDAO = new ProductMaganer("products", productSchema);
+const productDao = new ProductDAO("Product", productSchema);
 
-const getProductsService = async () => {
+const getProductsService = async (filters) => {
   try {
-    let products = await productDAO.getAllProducts();
+    const products = await productDao.getAllProducts(filters);
+
     return products;
   } catch (error) {
     throw Error(error);
@@ -14,44 +16,46 @@ const getProductsService = async () => {
 
 const createProductService = async (product) => {
   try {
-    let response = await productDAO.createProduct(product);
-    return response;
+    const products = await productDao.createProduct(product);
+    return products;
   } catch (error) {
     throw Error(error);
   }
 };
-const updateProductService = async (id, product) => {
+const createManyProductsService = async () => {
   try {
-    let response = await productDAO.updateProduct(id, product);
-    return response;
+    const result = await productDao.createManyProducts(products);
+
+    return result;
   } catch (error) {
     throw Error(error);
   }
 };
 
-const deleteProductService = async (id) => {
-  try {
-    let response = await productDAO.deleteProduct(id);
+const updateProductService = async ({ pid }, product) => {
+  if (!product.image) delete product.image;
 
-    return response;
-  } catch (error) {
-    throw Error(error);
-  }
+  const result = await productDao.updateProduct(pid, product);
+
+  return result;
 };
 
-const createManyProductsService = async (products) => {
-  try {
-    let response = await productDAO.createManyProducts(products);
-    return response;
-  } catch (error) {
-    throw Error(error);
-  }
+const createOneProductService = async (product) => {
+  const result = await productDao.createOneProduct(product);
+
+  return result;
+};
+const deleteProductService = async ({ pid }) => {
+  const result = await productDao.deleteProduct(pid);
+
+  return result;
 };
 
-export {
+module.exports = {
   getProductsService,
   createProductService,
-  updateProductService,
-  deleteProductService,
   createManyProductsService,
+  updateProductService,
+  createOneProductService,
+  deleteProductService,
 };

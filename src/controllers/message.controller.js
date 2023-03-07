@@ -1,16 +1,16 @@
-import {
-  getMessagesServices,
-  addMessageServices,
-} from "../services/message.service.js";
-
-const getMessages = async () => {
-  const messages = await getMessagesServices();
-  return messages;
+const getAllMessages = (req, res) => {
+  res.render("chat", {
+    title: "Desafio - Chat",
+    style: "index.css",
+  });
 };
 
-const addMessages = async (message) => {
-  const result = await addMessageServices(message);
-  return result;
+const addMessages = async (req, res) => {
+  await require("../socket").addMessagesSocket(req.body);
+  res.send({ status: "success", payload: "Message Added" });
 };
 
-export { getMessages, addMessages };
+module.exports = {
+  getAllMessages,
+  addMessages,
+};

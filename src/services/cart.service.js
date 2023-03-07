@@ -1,46 +1,58 @@
-import CartManager from "../../db/dao/cart.dao.js";
-import cartSchema from "../../db/dao/models/cart.model.js";
+const CartDAO = require("../dao/cart.dao");
+const cartSchema = require("../models/cart.model");
 
-const cartDAO = new CartManager("carts", cartSchema);
+const cartServices = new CartDAO("Cart", cartSchema);
 
-const getCartService = async (id) => {
-  try {
-    const cart = await cartDAO.getCart(id);
-    return cart;
-  } catch (error) {
-    throw Error(error);
-  }
+const getCartService = async (cartId) => {
+  const result = await cartServices.getCartById(cartId);
+
+  return result;
 };
+
 const createCartService = async () => {
-  try {
-    const newCart = await cartDAO.createCart();
-    return newCart;
-  } catch (error) {
-    throw Error(error);
-  }
+  const result = await cartServices.createCart();
+
+  return result;
 };
 
-const addProductToCartService = async (cartId, productId) => {
-  try {
-    const result = await cartDAO.addProduct(cartId, productId);
-    return result;
-  } catch (error) {
-    throw Error(error);
-  }
+const addProductToCartService = async ({ cid, pid }) => {
+  const result = await cartServices.addProductToCart(cid, pid);
+
+  return result;
 };
 
-const deleteProductInCartService = async (cartId, productId) => {
-  try {
-    const result = await cartDAO.deleteProduct(cartId, productId);
-    return result;
-  } catch (error) {
-    throw Error(error);
-  }
+const deleteProductInCartService = async ({ cid, pid }) => {
+  const result = await cartServices.deleteProductInCart(cid, pid);
+
+  return result;
 };
 
-export {
+const deleteCartService = async ({ cid }) => {
+  const result = await cartServices.deleteCart(cid);
+
+  return result;
+};
+
+const addManyProductsToCartService = async (products, { cid }) => {
+  console.log(products);
+
+  const result = await cartServices.addManyProductsToCart(products, cid);
+
+  return result;
+};
+
+const updateQuantityProductService = async ({ cid, pid }, { quantity }) => {
+  const result = await cartServices.updateQuantityProduct(cid, pid, quantity);
+
+  return result;
+};
+
+module.exports = {
   getCartService,
   createCartService,
   addProductToCartService,
   deleteProductInCartService,
+  deleteCartService,
+  addManyProductsToCartService,
+  updateQuantityProductService,
 };
